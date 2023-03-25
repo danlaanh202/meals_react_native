@@ -1,7 +1,8 @@
 import { Platform } from "react-native";
 import { Text, Pressable, View, StyleSheet } from "react-native";
-
-const CategoryGrid = ({ title, color }) => {
+import { useNavigation } from "@react-navigation/native";
+const CategoryGrid = ({ title, color, onPress }) => {
+  const navigation = useNavigation();
   return (
     <View style={[styles.gridItem, { backgroundColor: color }]}>
       <Pressable
@@ -10,6 +11,7 @@ const CategoryGrid = ({ title, color }) => {
           styles.button,
           pressed ? styles.buttonPressed : null,
         ]}
+        onPress={onPress}
       >
         <View style={styles.innerContainer}>
           <Text style={styles.title}>{title}</Text>
