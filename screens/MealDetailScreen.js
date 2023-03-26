@@ -12,6 +12,7 @@ import List from "../components/MealDetail/List";
 import Subtitle from "../components/MealDetail/Subtitle";
 import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy";
+import { Ionicons } from "@expo/vector-icons";
 const styles = StyleSheet.create({
   image: {
     width: "100%",
@@ -35,7 +36,14 @@ const MealDetailScreen = ({ navigation, route }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <Button title="Tap me" onPress={headerButtonPressHandler} />;
+        return (
+          <Ionicons
+            name="star-outline"
+            size={26}
+            color="white"
+            onPress={headerButtonPressHandler}
+          />
+        );
       },
     });
   }, [navigation, headerButtonPressHandler]);
