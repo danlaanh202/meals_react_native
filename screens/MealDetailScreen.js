@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 
 import {
   Text,
@@ -13,6 +13,7 @@ import Subtitle from "../components/MealDetail/Subtitle";
 import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy";
 import { Ionicons } from "@expo/vector-icons";
+import FavoritesContextProvider from "../store/context/favorites-context";
 const styles = StyleSheet.create({
   image: {
     width: "100%",
@@ -26,19 +27,28 @@ const styles = StyleSheet.create({
   },
 });
 const MealDetailScreen = ({ navigation, route }) => {
+  const favoriteMealContext = useContext(FavoritesContextProvider);
+
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+  const mealIsFavorite = favoriteMealContext.ids.includes(mealId);
 
   const headerButtonPressHandler = () => {
     console.log("pressed!");
   };
 
+  if (mealIsFavorite) {
+    favoriteMealContext.removeFavorite(mealId);
+  } else {
+    favoriteMealContext.addFavorite(mealId);
+  }
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
         return (
           <Ionicons
-            name="star-outline"
+            name={mealIsFavorite ? "star" : "star-outline"}
             size={26}
             color="white"
             onPress={headerButtonPressHandler}
