@@ -13,7 +13,7 @@ import Subtitle from "../components/MealDetail/Subtitle";
 import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy";
 import { Ionicons } from "@expo/vector-icons";
-import FavoritesContextProvider from "../store/context/favorites-context";
+import { FavoritesContext } from "../store/context/favorites-context";
 const styles = StyleSheet.create({
   image: {
     width: "100%",
@@ -27,22 +27,26 @@ const styles = StyleSheet.create({
   },
 });
 const MealDetailScreen = ({ navigation, route }) => {
-  const favoriteMealContext = useContext(FavoritesContextProvider);
+  const favoriteMealsContext = useContext(FavoritesContext);
 
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-  const mealIsFavorite = favoriteMealContext.ids.includes(mealId);
+  const mealIsFavorite = favoriteMealsContext.ids.includes(mealId);
 
   const headerButtonPressHandler = () => {
-    console.log("pressed!");
+    if (mealIsFavorite) {
+      favoriteMealsContext.removeFavorite(mealId);
+    } else {
+      favoriteMealsContext.addFavorite(mealId);
+    }
   };
 
-  if (mealIsFavorite) {
-    favoriteMealContext.removeFavorite(mealId);
-  } else {
-    favoriteMealContext.addFavorite(mealId);
-  }
+  // if (mealIsFavorite) {
+  //   favoriteMealsContext.removeFavorite(mealId);
+  // } else {
+  //   favoriteMealsContext.addFavorite(mealId);
+  // }
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
