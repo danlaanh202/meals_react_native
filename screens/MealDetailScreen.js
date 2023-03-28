@@ -14,6 +14,8 @@ import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy";
 import { Ionicons } from "@expo/vector-icons";
 import { FavoritesContext } from "../store/context/favorites-context";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavoriteMeal, removeFavoriteMeal } from "../store/redux/favorites";
 const styles = StyleSheet.create({
   image: {
     width: "100%",
@@ -27,26 +29,25 @@ const styles = StyleSheet.create({
   },
 });
 const MealDetailScreen = ({ navigation, route }) => {
-  const favoriteMealsContext = useContext(FavoritesContext);
+  // const favoriteMealsContext = useContext(FavoritesContext);
+  const favoriteMealIds = useSelector((state) => state.favoriteMeals.ids);
+
+  const dispatch = useDispatch();
 
   const mealId = route.params.mealId;
+
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
-  const mealIsFavorite = favoriteMealsContext.ids.includes(mealId);
+  const mealIsFavorite = favoriteMealIds.includes(mealId);
 
   const headerButtonPressHandler = () => {
     if (mealIsFavorite) {
-      favoriteMealsContext.removeFavorite(mealId);
+      dispatch(removeFavoriteMeal(mealId));
     } else {
-      favoriteMealsContext.addFavorite(mealId);
+      dispatch(addFavoriteMeal(mealId));
     }
   };
 
-  // if (mealIsFavorite) {
-  //   favoriteMealsContext.removeFavorite(mealId);
-  // } else {
-  //   favoriteMealsContext.addFavorite(mealId);
-  // }
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
